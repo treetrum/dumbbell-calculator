@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { v1 } from "uuid";
 
 interface Plate {
     weight: number;
@@ -11,7 +10,7 @@ interface Plate {
 const availablePlateWeights = [0.5, 1.25, 2.5, 5].sort((a, b) => b - a);
 const availablePlates: Plate[] = availablePlateWeights.map((weight) => ({
     weight,
-    id: v1(),
+    id: crypto.randomUUID(),
 }));
 const handleWeight = 1.5;
 
@@ -54,7 +53,7 @@ const plateCombinations = (() => {
 // Used to create a unique ID for each combination of plates. Disregards IDs and only looks at weight
 const createIdentity = (plates: Plate[]) => {
     return JSON.stringify(
-        plates.sort((a, b) => b.weight - a.weight).map((p) => p.weight)
+        plates.sort((a, b) => b.weight - a.weight).map((p) => p.weight),
     );
 };
 
@@ -77,7 +76,7 @@ export const Main = () => {
 
     const singleDumbbellWeight = usedPlates.reduce(
         (acc, plate) => acc + plate.weight * 2,
-        handleWeight
+        handleWeight,
     );
 
     return (
@@ -114,7 +113,7 @@ export const Main = () => {
                             key={plate.id}
                             onClick={() => {
                                 setUsedPlates((old) =>
-                                    old.filter((p) => p.id !== plate.id)
+                                    old.filter((p) => p.id !== plate.id),
                                 );
                             }}
                         >
@@ -133,14 +132,14 @@ export const Main = () => {
                     .map((combination) => {
                         const singleDumbbellWeight = combination.reduce(
                             (acc, curr) => acc + curr.weight * 2,
-                            handleWeight
+                            handleWeight,
                         );
                         const isActive =
                             JSON.stringify(
-                                combination.sort((a, b) => b.weight - a.weight)
+                                combination.sort((a, b) => b.weight - a.weight),
                             ) ===
                             JSON.stringify(
-                                usedPlates.sort((a, b) => b.weight - a.weight)
+                                usedPlates.sort((a, b) => b.weight - a.weight),
                             );
                         return (
                             <button
